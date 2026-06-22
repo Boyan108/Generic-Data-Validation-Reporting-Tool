@@ -1,3 +1,4 @@
 {
-    "required_columns": ["id", "name", "age", "country", "email"]
+    "required_columns": ["id", "name", "age", "country", "email"],
+    "no_missing_in": ["email", "age"]
   }

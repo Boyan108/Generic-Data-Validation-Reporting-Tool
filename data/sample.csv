@@ -1,5 +1,5 @@
 id,name,age,country,email
 1,Alice,30,UK,example@gmail.com
 2,Bob,25,USA
-3,Charlie,35,UK
+3,Charlie,,UK
 4,Diana,28,Canada
