@@ -20,6 +20,21 @@ def validate_no_missing(df, columns):
     passed = all(count == 0 for count in missing_values.values())
     return passed, missing_values
 
+def validate_ranges(df, ranges):
+    range_issues = {}
+    for col, limits in ranges.items():
+        if col in df.columns:
+            min_val = limits.get("min", float("-inf"))
+            max_val = limits.get("max", float("inf"))
+            valid = df[col].dropna()
+            too_low = valid < min_val
+            too_high = valid > max_val
+            out_of_range_count = (too_low | too_high).sum()
+            if out_of_range_count > 0:
+                range_issues[col] = out_of_range_count
+    passed = len(range_issues) == 0
+    return passed, range_issues
+
 def main():
     file_path = "data/sample.csv"
     df = read_csv(file_path)
@@ -45,6 +60,14 @@ def main():
         for col, count in missing_values.items():
             if count > 0:
                 print(f"FAIL: Column '{col}' has {count} missing values")
+
+    print("\nValidation: value ranges")
+    passed, range_issues = validate_ranges(df, rules.get("ranges", {}))
+    if passed:
+        print("PASS: All values within specified ranges")
+    else:
+        for col, count in range_issues.items():
+            print(f"FAIL: Column '{col}' has {count} values out of specified range")
     
     extra = [col for col in df.columns if col not in rules["required_columns"]]
     if extra:
