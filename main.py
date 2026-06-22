@@ -1,23 +1,18 @@
-import csv
+import pandas as pd
+
 
 def read_csv(file_path):
-    with open(file_path, mode='r', encoding='utf-8') as file:
-        csv_reader = csv.DictReader(file)
-        data = [row for row in csv_reader]
-    return data
+    return pd.read_csv(file_path)
 
 def main():
-    file_path = 'data/sample.csv'  
-    data = read_csv(file_path)
-    columns = data[0].keys() if data else []
-    print("Columns: "," | ".join(columns)) 
-    row_count = len(data)
-    print(f"Total rows: {row_count}")
-    print(" | ".join(columns))
-    print("-" * 40)
-
-    for row in data:
-        print(" | ".join(row[col] for col in columns))
+    file_path = "data/sample.csv"
+    df = read_csv(file_path)
+    rows, columns = df.shape
+    print(f"Number of rows: {rows}")
+    print(f"Number of columns: {columns}")
+    print("Columns:", list(df.columns))
+    print("First 5 rows of the DataFrame:\n", df.head())
+    print("\nData types of each column:", df.dtypes)
 
 if __name__ == "__main__":
     main()
